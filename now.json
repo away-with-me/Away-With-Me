@@ -2,7 +2,7 @@
   "version": 2,
   "name": "away-with-me",
   "scope": "away-with-me-jam",
-  "alias": ["away-with-me.now.sh"],
+  "alias": [],
   "builds": [
     {
       "src": "package.json",
