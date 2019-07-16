@@ -1,0 +1,15 @@
+{
+  "name": "summer-slow-jams",
+  "version": "0.0.1",
+  "description": "pdx fungeon squad slow game slow jam",
+  "repository": "https://glitch.com/edit/#!/phaser-starter",
+  "license": "MIT",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.16.4",
+    "phaser": "^3.16.2"
+  }
+}
