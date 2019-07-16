@@ -17,7 +17,7 @@ const titleScene = {
   preload() {},
 
   create() {
-    const title = this.add.text(WIDTH / 2, HEIGHT * 0.2, "AWAY WITH ME", {
+    const title = this.add.text(WIDTH / 2, HEIGHT * 0.2, "AWAY WITH ME!", {
       fontSize: 40
     });
     title.setOrigin(0.5, 0.5);
