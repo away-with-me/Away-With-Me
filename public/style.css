@@ -1,0 +1,13 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: #000;
+}
+
+canvas {
+  display: block;
+  margin: 20px auto;
+  border: 1px solid white;
+}
