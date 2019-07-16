@@ -4,12 +4,16 @@
   "description": "pdx fungeon squad slow game slow jam",
   "repository": "https://glitch.com/edit/#!/phaser-starter",
   "license": "MIT",
-  "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "parcel serve src/index.html",
+    "build": "parcel build src/index.html"
   },
   "dependencies": {
     "express": "^4.16.4",
-    "phaser": "^3.16.2"
+    "phaser": "^3.16.2",
+    "source-map-explorer": "^2.0.1"
+  },
+  "devDependencies": {
+    "parcel": "^1.12.3"
   }
 }

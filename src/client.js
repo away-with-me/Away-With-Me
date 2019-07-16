@@ -1,3 +1,5 @@
+import Phaser from "phaser";
+
 const WIDTH = 800;
 const HEIGHT = 600;
 
