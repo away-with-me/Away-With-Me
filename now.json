@@ -1,6 +1,7 @@
 {
   "version": 2,
   "name": "away-with-me",
+  "alias": ["away-with-me.now.sh"],
   "builds": [
     {
       "src": "package.json",
