@@ -1,13 +1,44 @@
 import Phaser from "phaser";
 
-const WIDTH = 800;
-const HEIGHT = 600;
+const WIDTH = 256;
+const HEIGHT = 256;
 
-class Coin extends Phaser.GameObjects.Arc {
-  constructor({ scene, x = 0, y = 0, color = 0xffff00 }) {
-    // function Arc (scene, x, y, radius, startAngle, endAngle, anticlockwise, fillColor, fillAlpha)
-    super(scene, x, y, 10, 0, 360, true, color);
-    this.body = new Phaser.Physics.Arcade.Body(scene.physics.world, this);
+const PLAYER_DX = 30;
+
+class Player extends Phaser.Physics.Arcade.Sprite {
+  static preload(scene) {
+    scene.load.image('player', 'player.png');
+  }
+
+  constructor(scene, x = 0, y = 0) {
+    super(scene, x, y, 'player');
+  }
+
+  update(scene) {
+    let dx = 0;
+    if (scene.keys.left.isDown) {
+      dx -= PLAYER_DX;
+    }
+    if (scene.keys.right.isDown) {
+      dx += PLAYER_DX;
+    }
+
+    this.setVelocityX(dx);
+  }
+}
+
+class Tilemap {
+  static preload(scene) {
+    scene.load.image('tileset', 'tiles.png');
+    scene.load.tilemapTiledJSON('tilemap', 'tilemap.json');
+  }
+
+  constructor(scene) {
+    this._tilemap = scene.make.tilemap({key: 'tilemap'});
+    this.tilesetImage = this._tilemap.addTilesetImage('tiles', 'tileset');
+    this.bgLayer = this._tilemap.createStaticLayer('background', this.tilesetImage, 0, 0);
+    this.platformLayer = this._tilemap.createStaticLayer('platforms', this.tilesetImage, 0, 0);
+    this.platformLayer.setCollisionFromCollisionGroup();
   }
 }
 
@@ -34,72 +65,23 @@ const titleScene = {
 const gameScene = {
   key: "game",
 
-  preload() {},
+  preload() {
+    Tilemap.preload(this);
+    Player.preload(this);
+  },
 
   create() {
-    this.rect = this.add.rectangle(WIDTH / 2, HEIGHT * 0.8, 20, 20, 0xff0000);
-    this.physics.add.existing(this.rect);
-    this.rect.body.setBounce(0.5, 0.5);
-    this.rect.body.setCollideWorldBounds(true);
-    this.rect.body.mass = this.rect.body.width * this.rect.body.height * 5;
+    this.keys = this.input.keyboard.createCursorKeys();
 
-    this.coins = [];
-    let coinsPhysicsGroup = this.physics.add.group({
-      allowGravity: false,
-      collideWorldBounds: true
-    });
+    this.tilemap = new Tilemap(this);
 
-    for (let i = 0; i < 50; i++) {
-      let coin = new Coin({
-        scene: this
-      });
-      Phaser.Geom.Rectangle.Random(this.physics.world.bounds, coin);
-
-      coinsPhysicsGroup.add(coin);
-      coin.body.setVelocity(
-        Math.random() * 400 - 200,
-        Math.random() * 400 - 200
-      );
-      coin.body.setBounce(1.0, 1.0);
-      this.add.existing(coin);
-      this.physics.add.existing(coin);
-      this.coins.push(coin);
-    }
-
-    //coinsPhysicsGroup.addMultiple(this.coins);
-
-    this.physics.add.overlap(this.rect, coinsPhysicsGroup, (rect, coin) => {
-      coin.destroy();
-      rect.width += 2;
-      rect.height += 2;
-      rect.body.width += 2;
-      rect.body.height += 2;
-      rect.body.mass = rect.body.width * rect.body.height;
-    });
-
-    this.cursorKeys = this.input.keyboard.createCursorKeys();
+    this.player = new Player(this, 50, 50);
+    this.add.existing(this.player);
+    this.physics.add.existing(this.player);
   },
 
   update() {
-    const force = 5000000;
-    const accel = force / this.rect.body.mass;
-    let ax = 0;
-    let ay = 0;
-
-    if (this.cursorKeys.down.isDown) {
-      ay += accel;
-    }
-    if (this.cursorKeys.up.isDown) {
-      ay -= accel;
-    }
-    if (this.cursorKeys.left.isDown) {
-      ax -= accel;
-    }
-    if (this.cursorKeys.right.isDown) {
-      ax += accel;
-    }
-
-    this.rect.body.setAcceleration(ax, ay);
+    this.player.update(this);
   }
 };
 
@@ -107,10 +89,13 @@ window.game = new Phaser.Game({
   type: Phaser.AUTO,
   width: WIDTH,
   height: HEIGHT,
+  scale: {
+    zoom: Phaser.Scale.Zoom.ZOOM_2X,
+  },
   physics: {
     default: "arcade",
     arcade: {
-      gravity: { y: 200 }
+      gravity: { y: 0 }
     }
   },
   scene: [titleScene, gameScene]
