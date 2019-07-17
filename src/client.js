@@ -1,9 +1,11 @@
 import Phaser from "phaser";
 
 const CANVAS_WIDTH = 256;
-const CANVAS_HEIGHT = 256;
+const CANVAS_HEIGHT = 192;
+const WORLD_HEIGHT = 256;
 
-const PLAYER_DX = 60;
+const PLAYER_DX = 100;
+const PLAYER_DY = -170;
 
 class Player extends Phaser.Physics.Arcade.Sprite {
   static preload(scene) {
@@ -16,35 +18,31 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
   update(scene) {
     let dx = 0;
-    let dy = 0;
     if (scene.keys.left.isDown) {
       dx -= PLAYER_DX;
     }
     if (scene.keys.right.isDown) {
       dx += PLAYER_DX;
     }
-    if (scene.keys.up.isDown) {
-      dy -= PLAYER_DX;
-    }
-    if (scene.keys.down.isDown) {
-      dy += PLAYER_DX;
-    }
+    this.setVelocityX(dx);
 
-    this.setVelocity(dx, dy);
+    if (scene.keys.space.isDown && this.body.blocked.down) {
+      this.body.setVelocityY(PLAYER_DY);
+    }
   }
 }
 
-class Tilemap {
+class TilemapManager {
   static preload(scene) {
     scene.load.image('tileset', 'tiles.png');
     scene.load.tilemapTiledJSON('tilemap', 'tilemap.json');
   }
 
   constructor(scene) {
-    this._tilemap = scene.make.tilemap({key: 'tilemap'});
-    this.tilesetImage = this._tilemap.addTilesetImage('tiles', 'tileset');
-    this.bgLayer = this._tilemap.createStaticLayer('background', this.tilesetImage, 0, 0);
-    this.platformLayer = this._tilemap.createStaticLayer('platforms', this.tilesetImage, 0, 0);
+    this.tilemap = scene.make.tilemap({key: 'tilemap'});
+    this.tilesetImage = this.tilemap.addTilesetImage('tiles', 'tileset');
+    this.bgLayer = this.tilemap.createStaticLayer('background', this.tilesetImage, 0, 0);
+    this.platformLayer = this.tilemap.createStaticLayer('platforms', this.tilesetImage, 0, 0);
     this.platformLayer.setCollisionFromCollisionGroup();
   }
 }
@@ -61,7 +59,8 @@ const titleScene = {
       "AWAY WITH ME!",
       {
         fontSize: 30
-      });
+      },
+    );
     title.setOrigin(0.5, 0.5);
     this.cursorKeys = this.input.keyboard.createCursorKeys();
   },
@@ -77,23 +76,25 @@ const gameScene = {
   key: "game",
 
   preload() {
-    Tilemap.preload(this);
+    TilemapManager.preload(this);
     Player.preload(this);
   },
 
   create() {
     this.keys = this.input.keyboard.createCursorKeys();
 
-    this.tilemap = new Tilemap(this);
+    this.tilemapManager = new TilemapManager(this);
 
     this.player = new Player(this, 50, CANVAS_HEIGHT * 0.8);
     this.add.existing(this.player);
     this.physics.add.existing(this.player);
 
-    this.cameras.main.startFollow(this.player, true, 0.5, 0.5);
+    this.physics.add.collider(this.player, this.tilemapManager.platformLayer);
+
+    this.cameras.main.startFollow(this.player, true);
     this.cameras.main.setBounds(
-      -Infinity, CANVAS_HEIGHT * -0.05,
-      Infinity, CANVAS_HEIGHT * 1.1,
+      0, 0,
+      Infinity, WORLD_HEIGHT,
       )
   },
 
@@ -112,7 +113,7 @@ window.game = new Phaser.Game({
   physics: {
     default: "arcade",
     arcade: {
-      gravity: { y: 0 }
+      gravity: { y: 350 }
     }
   },
   scene: [titleScene, gameScene]
