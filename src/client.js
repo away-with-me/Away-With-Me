@@ -1,9 +1,9 @@
 import Phaser from "phaser";
 
-const WIDTH = 256;
-const HEIGHT = 256;
+const CANVAS_WIDTH = 256;
+const CANVAS_HEIGHT = 256;
 
-const PLAYER_DX = 30;
+const PLAYER_DX = 60;
 
 class Player extends Phaser.Physics.Arcade.Sprite {
   static preload(scene) {
@@ -16,14 +16,21 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
   update(scene) {
     let dx = 0;
+    let dy = 0;
     if (scene.keys.left.isDown) {
       dx -= PLAYER_DX;
     }
     if (scene.keys.right.isDown) {
       dx += PLAYER_DX;
     }
+    if (scene.keys.up.isDown) {
+      dy -= PLAYER_DX;
+    }
+    if (scene.keys.down.isDown) {
+      dy += PLAYER_DX;
+    }
 
-    this.setVelocityX(dx);
+    this.setVelocity(dx, dy);
   }
 }
 
@@ -48,9 +55,13 @@ const titleScene = {
   preload() {},
 
   create() {
-    const title = this.add.text(WIDTH / 2, HEIGHT * 0.2, "AWAY WITH ME!", {
-      fontSize: 40
-    });
+    const title = this.add.text(
+      CANVAS_WIDTH / 2,
+      CANVAS_HEIGHT * 0.2,
+      "AWAY WITH ME!",
+      {
+        fontSize: 30
+      });
     title.setOrigin(0.5, 0.5);
     this.cursorKeys = this.input.keyboard.createCursorKeys();
   },
@@ -75,9 +86,15 @@ const gameScene = {
 
     this.tilemap = new Tilemap(this);
 
-    this.player = new Player(this, 50, 50);
+    this.player = new Player(this, 50, CANVAS_HEIGHT * 0.8);
     this.add.existing(this.player);
     this.physics.add.existing(this.player);
+
+    this.cameras.main.startFollow(this.player, true, 0.5, 0.5);
+    this.cameras.main.setBounds(
+      -Infinity, CANVAS_HEIGHT * -0.05,
+      Infinity, CANVAS_HEIGHT * 1.1,
+      )
   },
 
   update() {
@@ -87,8 +104,8 @@ const gameScene = {
 
 window.game = new Phaser.Game({
   type: Phaser.AUTO,
-  width: WIDTH,
-  height: HEIGHT,
+  width: CANVAS_WIDTH,
+  height: CANVAS_HEIGHT,
   scale: {
     zoom: Phaser.Scale.Zoom.ZOOM_2X,
   },
