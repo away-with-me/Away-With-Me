@@ -45,6 +45,17 @@ class TilemapManager {
     this.platformLayer = this.tilemap.createStaticLayer('platforms', this.tilesetImage, 0, 0);
     this.platformLayer.setCollisionFromCollisionGroup();
   }
+
+  findObject(objectName) {
+    let objectLayers = Phaser.Utils.Array.GetAll(this.tilemap.objects);
+    for (let objectLayer of objectLayers) {
+      let object = Phaser.Utils.Array.GetFirst(objectLayer, "name", objectName);
+      if (object !== null) {
+        return object;
+      }
+    }
+    return null;
+  }
 }
 
 const titleScene = {
@@ -84,8 +95,8 @@ const gameScene = {
     this.keys = this.input.keyboard.createCursorKeys();
 
     this.tilemapManager = new TilemapManager(this);
-
-    this.player = new Player(this, 50, CANVAS_HEIGHT * 0.8);
+    const playerStart = this.tilemapManager.findObject("player_start");
+    this.player = new Player(this, playerStart.x, playerStart.y);
     this.add.existing(this.player);
     this.physics.add.existing(this.player);
 
