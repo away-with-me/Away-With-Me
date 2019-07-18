@@ -46,8 +46,30 @@
          "visible":true,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "name":"items",
+         "objects":[
+                {
+                 "gid":5,
+                 "height":16,
+                 "id":5,
+                 "name":"ball",
+                 "rotation":0,
+                 "type":"ball",
+                 "visible":true,
+                 "width":16,
+                 "x":608,
+                 "y":160
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextobjectid":5,
+ "nextobjectid":7,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.1.5",
@@ -57,12 +79,12 @@
          "columns":4,
          "firstgid":1,
          "image":"tiles.png",
-         "imageheight":16,
+         "imageheight":32,
          "imagewidth":64,
          "margin":0,
          "name":"tiles",
          "spacing":0,
-         "tilecount":4,
+         "tilecount":8,
          "tileheight":16,
          "tiles":
             {
