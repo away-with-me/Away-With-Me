@@ -8,3 +8,5 @@ export const WORLD_HEIGHT = 256;
 
 export const SHADOW_DX = 20;
 export const SHADOW_FOLLOW_DISTANCE = 80;
+
+export const GROUND_LEVEL = WORLD_HEIGHT - 16;

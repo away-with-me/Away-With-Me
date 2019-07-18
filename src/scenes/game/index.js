@@ -1,7 +1,8 @@
 import TilemapManager from "./TilemapManager";
 import Player from "./Player";
 import ShadowWall from "./ShadowWall";
-import { WORLD_HEIGHT, CANVAS_HEIGHT, CANVAS_WIDTH } from "../../constants";
+import AnchorTree from "./AnchorTree";
+import { WORLD_HEIGHT, GROUND_LEVEL, CANVAS_WIDTH } from "../../constants";
 
 const gameScene = {
   key: "game",
@@ -10,6 +11,7 @@ const gameScene = {
     TilemapManager.preload(this);
     Player.preload(this);
     ShadowWall.preload(this);
+    AnchorTree.preload(this);
   },
 
   create() {
@@ -21,6 +23,9 @@ const gameScene = {
     this.player = new Player(this, playerStart.x, playerStart.y);
     this.add.existing(this.player);
     this.physics.add.existing(this.player);
+    this.player.setScale(2, 2);
+
+    this.anchorTree = new AnchorTree({ scene: this, x: 280, y: GROUND_LEVEL + 25 });
 
     for (const {platformLayer} of this.tilemapManager.tilemaps) {
       this.physics.add.collider(this.player, platformLayer);
@@ -43,6 +48,7 @@ const gameScene = {
     this.player.update(this);
     this.shadowWall.update(this);
     this.tilemapManager.update(this);
+    this.anchorTree.update(this);
   }
 };
 
