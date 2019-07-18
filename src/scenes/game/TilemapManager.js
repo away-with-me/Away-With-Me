@@ -1,13 +1,19 @@
 import Phaser from 'phaser';
+import Ball from './Ball';
 
 const LEFT = 0;
 const MIDDLE = 1;
 const RIGHT = 2;
 
+const ITEM_TYPES = {
+  'ball': Ball,
+}
+
 export default class TilemapManager {
   static preload(scene) {
-    scene.load.image('tileset', 'tiles.png');
+    scene.load.spritesheet('tileset', 'tiles.png', {frameWidth: 16, frameHeight: 16});
     scene.load.tilemapTiledJSON('tilemap', 'tilemap.json');
+    Ball.preload(scene);
   }
 
   constructor(scene) {
@@ -25,6 +31,30 @@ export default class TilemapManager {
     this.mapWidthTiles = this.tilemaps[LEFT].tilemap.width;
     this.mapWidth = this.tileWidth * this.mapWidthTiles;
 
+    this.items = [];
+    const itemLayer = this.tilemaps[LEFT].tilemap.getObjectLayer('items');
+    for (const itemObject of itemLayer.objects) {
+      const ItemClass = ITEM_TYPES[itemObject.type];
+      const item = new ItemClass(
+        scene,
+        // Tiled coordinates are top-left, sprite coordinates are center of sprite
+        itemObject.x + (itemObject.width / 2),
+        itemObject.y - (itemObject.height / 2), // Why is this minus instead of plus?
+      );
+
+      scene.add.existing(item);
+      scene.physics.add.existing(item);
+
+      item.originalX = itemObject.x;
+      item.originalY = itemObject.y;
+      item.body.allowGravity = false;
+
+      this.items.push(item);
+      item.on('destroy', () => {
+        this.items = this.items.filter(i => i !== item);
+      });
+    }
+
     this.setMiddleTilemapX(0);
   }
 
@@ -32,6 +62,9 @@ export default class TilemapManager {
     this.setTilemapX(LEFT, x - this.mapWidth);
     this.setTilemapX(MIDDLE, x);
     this.setTilemapX(RIGHT, x + this.mapWidth);
+    for (const item of this.items) {
+      item.x = x + item.originalX + (item.width / 2);
+    }
   }
 
   setTilemapX(side, x) {
@@ -42,7 +75,7 @@ export default class TilemapManager {
   // Given the name of an object in the tilemap, searches all object layers for
   // a corresponding object and returns the first one encountered or null if
   // none are encountered.
-  findObject(objectName) {
+  findObject(objectLayer, objectName) {
     let objectLayers = Phaser.Utils.Array.GetAll(this.tilemaps[LEFT].tilemap.objects);
     for (let objectLayer of objectLayers) {
       let object = Phaser.Utils.Array.GetFirst(objectLayer.objects, "name", objectName);
@@ -60,6 +93,10 @@ export default class TilemapManager {
     if (scene.player.x < middleTilemapLayer.x || scene.player.x > (middleTilemapLayer.x + this.mapWidth)) {
       const newX = scene.player.x - (scene.player.x % this.mapWidth);
       this.setMiddleTilemapX(newX);
+    }
+
+    for (const item of this.items) {
+      item.update(scene);
     }
   }
 }
