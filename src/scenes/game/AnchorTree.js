@@ -19,6 +19,7 @@ export default class AnchorTree extends Phaser.GameObjects.Sprite {
 
     this.eyes = new Phaser.GameObjects.Sprite(scene, x + 5, y - 65, "tree-eyes");
     scene.add.existing(this.eyes);
+    this.eyes.depth += 100;
 
     this._animation_state = "OPEN";
     this._animation_frame = 0;

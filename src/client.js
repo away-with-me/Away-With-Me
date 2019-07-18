@@ -10,7 +10,7 @@ window.game = new Phaser.Game({
   width: CANVAS_WIDTH,
   height: CANVAS_HEIGHT,
   scale: {
-    zoom: Phaser.Scale.Zoom.ZOOM_2X,
+    zoom: 3,
   },
   physics: {
     default: "arcade",
