@@ -22,7 +22,9 @@ const gameScene = {
     this.add.existing(this.player);
     this.physics.add.existing(this.player);
 
-    this.physics.add.collider(this.player, this.tilemapManager.platformLayer);
+    for (const {platformLayer} of this.tilemapManager.tilemaps) {
+      this.physics.add.collider(this.player, platformLayer);
+    }
 
     this.shadowWall = new ShadowWall({ scene: this, player: this.player });
     this.add.existing(this.shadowWall);
@@ -40,6 +42,7 @@ const gameScene = {
   update() {
     this.player.update(this);
     this.shadowWall.update(this);
+    this.tilemapManager.update(this);
   }
 };
 
