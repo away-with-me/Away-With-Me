@@ -9,3 +9,5 @@ node_modules/
 *.log
 .cache
 dist
+
+.*.swp

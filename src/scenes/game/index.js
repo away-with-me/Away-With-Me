@@ -15,7 +15,8 @@ const gameScene = {
 
     this.tilemapManager = new TilemapManager(this);
 
-    this.player = new Player(this, 50, CANVAS_HEIGHT * 0.8);
+    const playerStart = this.tilemapManager.findObject("player_start");
+    this.player = new Player(this, playerStart.x, playerStart.y);
     this.add.existing(this.player);
     this.physics.add.existing(this.player);
 
