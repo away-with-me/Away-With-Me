@@ -24,7 +24,13 @@ export default class TilemapManager {
       const backgroundLayer = tilemap.createStaticLayer('background', tilesetImage, 0, 0);
       const platformLayer = tilemap.createStaticLayer('platforms', tilesetImage, 0, 0);
       platformLayer.setCollisionFromCollisionGroup();
-      this.tilemaps.push({tilemap, backgroundLayer, platformLayer});
+      this.tilemaps.push({
+        tilemap,
+        backgroundLayer,
+        platformLayer,
+        tilesetImage,
+        extraLayers: [],
+      });
     }
 
     this.tileWidth = this.tilemaps[LEFT].tilemap.tileWidth;
@@ -39,7 +45,8 @@ export default class TilemapManager {
         scene,
         // Tiled coordinates are top-left, sprite coordinates are center of sprite
         itemObject.x + (itemObject.width / 2),
-        itemObject.y - (itemObject.height / 2), // Why is this minus instead of plus?
+        itemObject.y - (itemObject.height / 2), // Why is this minus instead of plus?,
+        itemObject,
       );
 
       scene.add.existing(item);
@@ -68,8 +75,26 @@ export default class TilemapManager {
   }
 
   setTilemapX(side, x) {
-    this.tilemaps[side].backgroundLayer.x = x;
-    this.tilemaps[side].platformLayer.x = x;
+    const sideTilemap = this.tilemaps[side];
+    sideTilemap.backgroundLayer.x = x;
+    sideTilemap.platformLayer.x = x;
+    for (const layer of sideTilemap.extraLayers) {
+      layer.x = x;
+    }
+  }
+
+  addExtraLayer(scene, layerName) {
+    for (const tilemap of this.tilemaps) {
+      const extraLayer = tilemap.tilemap.createStaticLayer(
+        layerName,
+        tilemap.tilesetImage,
+        tilemap.platformLayer.x,
+        tilemap.platformLayer.y,
+      );
+      extraLayer.setCollisionFromCollisionGroup();
+      scene.physics.add.collider(scene.player, extraLayer);
+      tilemap.extraLayers.push(extraLayer);
+    }
   }
 
   // Given the name of an object in the tilemap, searches all object layers for
