@@ -30,7 +30,6 @@ const titleScene = {
 
   update() {
     if (this.cursorKeys.space.isDown) {
-      console.log(menuState);
       if (menuState === menuSelectedEnum.Start) {
         this.scene.switch("game");
       }

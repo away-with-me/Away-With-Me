@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 
-import { SHADOW_DX, SHADOW_FOLLOW_DISTANCE } from "../../constants";
+import { SHADOW_DX, SHADOW_FOLLOW_DISTANCE, DEPTH_SHADOW_WALL } from "../../constants";
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
   static preload(scene) {
@@ -14,6 +14,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     y = 0
   }) {
     super(scene, x, y, "shadow-wall");
+    this.depth += DEPTH_SHADOW_WALL;
     this.setOrigin(1.0, 0.0);
     this.player = player;
     this.farthestPlayerPosition = player.x;

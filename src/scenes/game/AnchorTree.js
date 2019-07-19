@@ -1,25 +1,27 @@
 import Phaser from "phaser";
+import { DEPTH_FOREGROUND, DEPTH_ABOVE_SHADOW } from "../../constants";
 
-import { PLAYER_DX, PLAYER_DY } from "../../constants";
-
+const BLINK_PROBABILITY = 0.002;
 const BLINK_MUL = 1.2;
 const BLINK_DURATION = 8;
 
-export default class AnchorTree extends Phaser.GameObjects.Sprite {
+export default class AnchorTree extends Phaser.GameObjects.Container {
   static preload(scene) {
     scene.load.image("anchor-tree", "AnchorTree-ByErro.png");
     scene.load.image("tree-eyes", "CreepyEyes-ByErro.png");
   }
 
   constructor({ scene, x = 0, y = 0 }) {
-    super(scene, x, y, "anchor-tree");
-    this.setOrigin(0.5, 1.0);
+    super(scene, x, y);
+    this.setSize(112, 168)
 
-    scene.add.existing(this);
+    this.tree = new Phaser.GameObjects.Sprite(scene, 0, 0, "anchor-tree");
+    this.depth += DEPTH_FOREGROUND;
+    this.add(this.tree);
 
-    this.eyes = new Phaser.GameObjects.Sprite(scene, x + 5, y - 65, "tree-eyes");
-    scene.add.existing(this.eyes);
-    this.eyes.depth += 100;
+    this.eyes = new Phaser.GameObjects.Sprite(scene, 5, 15, "tree-eyes");
+    this.eyes.depth += DEPTH_ABOVE_SHADOW;
+    this.add(this.eyes);
 
     this._animation_state = "OPEN";
     this._animation_frame = 0;
@@ -28,7 +30,7 @@ export default class AnchorTree extends Phaser.GameObjects.Sprite {
   update(scene) {
     switch(this._animation_state) {
       case "OPEN": {
-        if (Math.random() < 0.002) {
+        if (Math.random() < BLINK_PROBABILITY) {
           this._animation_state = "BLINKING";
         }
         break;

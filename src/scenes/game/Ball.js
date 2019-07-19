@@ -5,10 +5,10 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     scene.load.audio('item', 'item.mp3');
   }
 
-  constructor(scene, x = 0, y = 0, mapObject) {
+  constructor({scene, x = 0, y = 0, mapObject}) {
     super(scene, x, y, 'tileset', 4);
     this.sound = scene.sound.add('item');
-    this.extraLayer = mapObject.properties.extraLayer;
+    this.extraLayer = mapObject.properties.find(p => p.name == "extraLayer").value;
   }
 
   update(scene) {

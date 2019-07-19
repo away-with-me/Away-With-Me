@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import Ball from './Ball';
+import AnchorTree from './AnchorTree';
 
 const LEFT = 0;
 const MIDDLE = 1;
@@ -7,13 +8,16 @@ const RIGHT = 2;
 
 const ITEM_TYPES = {
   'ball': Ball,
+  'anchor_tree': AnchorTree,
 }
 
 export default class TilemapManager {
   static preload(scene) {
     scene.load.spritesheet('tileset', 'tiles.png', {frameWidth: 16, frameHeight: 16});
     scene.load.tilemapTiledJSON('tilemap', 'tilemap.json');
-    Ball.preload(scene);
+    for (const ItemClass of Object.values(ITEM_TYPES)) {
+      ItemClass.preload(scene);
+    }
   }
 
   constructor(scene) {
@@ -41,13 +45,17 @@ export default class TilemapManager {
     const itemLayer = this.tilemaps[LEFT].tilemap.getObjectLayer('items');
     for (const itemObject of itemLayer.objects) {
       const ItemClass = ITEM_TYPES[itemObject.type];
-      const item = new ItemClass(
+
+      const offsetX = ((itemObject.properties || []).find(p => p.name == "offsetX") || {value: 0}).value;
+      const offsetY = ((itemObject.properties || []).find(p => p.name == "offsetY") || {value: 0}).value;
+
+      const item = new ItemClass({
         scene,
         // Tiled coordinates are top-left, sprite coordinates are center of sprite
-        itemObject.x + (itemObject.width / 2),
-        itemObject.y - (itemObject.height / 2), // Why is this minus instead of plus?,
-        itemObject,
-      );
+        x: itemObject.x + (itemObject.width / 2) + offsetX,
+        y: itemObject.y + (itemObject.height / 2) + offsetY,
+        mapObject: itemObject,
+      });
 
       scene.add.existing(item);
       scene.physics.add.existing(item);
@@ -103,7 +111,7 @@ export default class TilemapManager {
   findObject(objectLayer, objectName) {
     let objectLayers = Phaser.Utils.Array.GetAll(this.tilemaps[LEFT].tilemap.objects);
     for (let objectLayer of objectLayers) {
-      let object = Phaser.Utils.Array.GetFirst(objectLayer.objects, "name", objectName);
+      let object = Phaser.Utils.Array.GetFirst(objectLayer.objects, "type", objectName);
       if (object !== null) {
         return object;
       }

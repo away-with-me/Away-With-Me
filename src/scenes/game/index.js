@@ -19,13 +19,11 @@ const gameScene = {
 
     this.tilemapManager = new TilemapManager(this);
 
-    const playerStart = this.tilemapManager.findObject('objects', 'player_start');
+    const playerStart = this.tilemapManager.findObject('markers', 'player_start');
     this.player = new Player(this, playerStart.x, playerStart.y);
     this.add.existing(this.player);
     this.physics.add.existing(this.player);
     this.player.setScale(2, 2);
-
-    this.anchorTree = new AnchorTree({ scene: this, x: 280, y: GROUND_LEVEL + 25 });
 
     for (const {platformLayer} of this.tilemapManager.tilemaps) {
       this.physics.add.collider(this.player, platformLayer);
@@ -48,7 +46,6 @@ const gameScene = {
     this.player.update(this);
     this.shadowWall.update(this);
     this.tilemapManager.update(this);
-    this.anchorTree.update(this);
   }
 };
 
