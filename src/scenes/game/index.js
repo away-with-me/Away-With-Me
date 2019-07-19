@@ -35,7 +35,7 @@ const gameScene = {
     this.shadowWall.body.allowGravity = false;
 
     this.physics.add.collider(this.player, this.shadowWall, () => {
-      this.scene.switch("gameOver");
+      this.scene.transition({ target: "gameOver" });
     })
 
     this.cameras.main.startFollow(this.player, true, 1.0, 1.0, -CANVAS_WIDTH * 0.1);

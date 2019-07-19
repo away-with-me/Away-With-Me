@@ -6,7 +6,14 @@ const gameOverScene = {
   preload() {},
 
   create() {
-    const title = this.add.text(
+    this.add.rectangle(
+      CANVAS_WIDTH / 2,
+      CANVAS_HEIGHT / 2,
+      CANVAS_WIDTH,
+      CANVAS_HEIGHT,
+      0x000000
+    );
+    const text = this.add.text(
       CANVAS_WIDTH / 2,
       CANVAS_HEIGHT * 0.2,
       "GAME OVER",
@@ -14,7 +21,7 @@ const gameOverScene = {
         fontSize: 30
       }
     );
-    title.setOrigin(0.5, 0.5);
+    text.setOrigin(0.5, 0.5);
   },
 
   update() {}

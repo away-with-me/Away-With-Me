@@ -14,8 +14,7 @@ const menuSelectedEnum = {
 let menuState = menuSelectedEnum.Start;
 
 const titleScene = {
-  key: "title",
-
+  key: "00_title",
 
   preload() {
     this.load.image('main', 'title/main.png');
@@ -31,8 +30,11 @@ const titleScene = {
   update() {
     if (this.cursorKeys.space.isDown) {
       if (menuState === menuSelectedEnum.Start) {
-        this.scene.switch("game");
+        this.scene.transition({target: "game"});
       }
+    }
+    if (this.cursorKeys.shift.isDown) {
+      this.scene.transition({target: "credits", sleep: true});
     }
   }
 };

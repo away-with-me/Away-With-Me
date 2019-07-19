@@ -3,6 +3,7 @@ import Phaser from "phaser";
 import gameScene from "./scenes/game";
 import titleScene from "./scenes/title";
 import gameOverScene from "./scenes/gameOver";
+import creditsScene from "./scenes/credits";
 import {CANVAS_HEIGHT, CANVAS_WIDTH} from "./constants";
 
 window.game = new Phaser.Game({
@@ -19,5 +20,5 @@ window.game = new Phaser.Game({
       gravity: { y: 350 }
     }
   },
-  scene: [titleScene, gameScene, gameOverScene]
+  scene: [titleScene, gameScene, gameOverScene, creditsScene]
 });
