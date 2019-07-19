@@ -23,7 +23,8 @@ const gameScene = {
     this.player = new Player(this, playerStart.x, playerStart.y);
     this.add.existing(this.player);
     this.physics.add.existing(this.player);
-    this.player.setScale(2, 2);
+    this.player.body.width = this.player.width - 4;
+    this.player.body.offset.x = 2;
 
     for (const {platformLayer} of this.tilemapManager.tilemaps) {
       this.physics.add.collider(this.player, platformLayer);

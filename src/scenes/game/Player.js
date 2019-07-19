@@ -22,7 +22,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.setVelocityX(dx);
 
     if (scene.keys.space.isDown && this.body.blocked.down) {
-      this.body.setVelocityY(PLAYER_DY);
+      this.body.setVelocityY(-PLAYER_DY);
     }
   }
 }

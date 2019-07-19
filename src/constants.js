@@ -1,5 +1,5 @@
 export const PLAYER_DX = 100;
-export const PLAYER_DY = -170;
+export const PLAYER_DY = 160;
 
 export const CANVAS_WIDTH = 16 * 26;
 export const CANVAS_HEIGHT = 16 * 9;
