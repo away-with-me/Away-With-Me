@@ -44,11 +44,11 @@ const titleScene = {
   update() {
     if (Phaser.Input.Keyboard.JustDown(this.cursorKeys.space)) {
       if (this.menuState === menuSelectedEnum.Start) {
-        this.scene.transition({target: "game"});
+        this.scene.transition({target: "game", duration: 0});
       } else if (this.menuState === menuSelectedEnum.Controls) {
-        this.scene.transition({target: "controls", sleep: true});
+        this.scene.transition({target: "controls", duration: 0, sleep: true});
       } else if (this.menuState === menuSelectedEnum.Credits) {
-        this.scene.transition({target: "credits", sleep: true});
+        this.scene.transition({target: "credits", duration: 0,  sleep: true});
       }
     }
     let changed = false;
