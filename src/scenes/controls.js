@@ -17,9 +17,6 @@ spacebar
 const controlsScene = {
   key: "controls",
 
-  preload() {
-  },
-
   create() {
     this.add.rectangle(
       CANVAS_WIDTH / 2,

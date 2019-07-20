@@ -7,13 +7,6 @@ import { WORLD_HEIGHT, CANVAS_WIDTH } from "../../constants";
 const gameScene = {
   key: "game",
 
-  preload() {
-    TilemapManager.preload(this);
-    Player.preload(this);
-    ShadowWall.preload(this);
-    AnchorTree.preload(this);
-  },
-
   create() {
     this.keys = this.input.keyboard.createCursorKeys();
 

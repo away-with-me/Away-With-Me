@@ -3,10 +3,6 @@ import { CANVAS_HEIGHT, CANVAS_WIDTH } from "../constants";
 const gameOverScene = {
   key: "gameOver",
 
-  preload() {
-
-  },
-
   create() {
     this.add.rectangle(
       CANVAS_WIDTH / 2,

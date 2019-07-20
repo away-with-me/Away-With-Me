@@ -17,23 +17,10 @@ const MENU_POS = [
 const CURSOR_X_OFFSET = -40;
 
 const titleScene = {
-  key: "00_title",
-
-  preload() {
-    this.load.image('main', 'title/main.png');
-    this.load.image('cursor', 'title/cursor.png');
-    this.load.image('start-button', 'title/start-button.png');
-    this.load.image('controls-button', 'title/controls-button.png');
-    this.load.image('credits-button', 'title/credits-button.png');
-
-    this.load.audioSprite({
-      key: "audiosprite",
-      jsonURL: "sounds/audiosprite.json"
-    });
-  },
+  key: "title",
 
   create() {
-    this.add.image(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, 'main');
+    this.add.image(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, 'title-bg');
     let cursorPos = MENU_POS[menuSelectedEnum['Start']];
     this.cursor = this.add.image(cursorPos.x + CURSOR_X_OFFSET, cursorPos.y, 'cursor');
     let startPos = MENU_POS[menuSelectedEnum['Start']];
