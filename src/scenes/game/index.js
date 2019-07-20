@@ -2,7 +2,7 @@ import TilemapManager from "./TilemapManager";
 import Player from "./Player";
 import ShadowWall from "./ShadowWall";
 import AnchorTree from "./AnchorTree";
-import { WORLD_HEIGHT, GROUND_LEVEL, CANVAS_WIDTH } from "../../constants";
+import { WORLD_HEIGHT, CANVAS_WIDTH } from "../../constants";
 
 const gameScene = {
   key: "game",
