@@ -45,6 +45,8 @@ const titleScene = {
     if (Phaser.Input.Keyboard.JustDown(this.cursorKeys.space)) {
       if (this.menuState === menuSelectedEnum.Start) {
         this.scene.transition({target: "game"});
+      } else if (this.menuState === menuSelectedEnum.Controls) {
+        this.scene.transition({target: "controls", sleep: true});
       } else if (this.menuState === menuSelectedEnum.Credits) {
         this.scene.transition({target: "credits", sleep: true});
       }
