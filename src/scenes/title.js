@@ -25,6 +25,11 @@ const titleScene = {
     this.load.image('start-button', 'title/start-button.png');
     this.load.image('controls-button', 'title/controls-button.png');
     this.load.image('credits-button', 'title/credits-button.png');
+
+    this.load.audioSprite({
+      key: "audiosprite",
+      jsonURL: "sounds/audiosprite.json"
+    });
   },
 
   create() {

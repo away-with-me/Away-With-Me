@@ -19,14 +19,17 @@ const gameScene = {
 
     this.tilemapManager = new TilemapManager(this);
 
-    const playerStart = this.tilemapManager.findObject('markers', 'player_start');
+    const playerStart = this.tilemapManager.findObject(
+      "markers",
+      "player_start"
+    );
     this.player = new Player(this, playerStart.x, playerStart.y);
     this.add.existing(this.player);
     this.physics.add.existing(this.player);
     this.player.body.width = this.player.width - 4;
     this.player.body.offset.x = 2;
 
-    for (const {platformLayer} of this.tilemapManager.tilemaps) {
+    for (const { platformLayer } of this.tilemapManager.tilemaps) {
       this.physics.add.collider(this.player, platformLayer);
     }
 
@@ -37,9 +40,15 @@ const gameScene = {
 
     this.physics.add.collider(this.player, this.shadowWall, () => {
       this.scene.transition({ target: "gameOver" });
-    })
+    });
 
-    this.cameras.main.startFollow(this.player, true, 1.0, 1.0, -CANVAS_WIDTH * 0.1);
+    this.cameras.main.startFollow(
+      this.player,
+      true,
+      1.0,
+      1.0,
+      -CANVAS_WIDTH * 0.1
+    );
     this.cameras.main.setBounds(0, 0, Infinity, WORLD_HEIGHT);
   },
 

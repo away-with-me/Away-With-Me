@@ -3,7 +3,9 @@ import { CANVAS_HEIGHT, CANVAS_WIDTH } from "../constants";
 const gameOverScene = {
   key: "gameOver",
 
-  preload() {},
+  preload() {
+
+  },
 
   create() {
     this.add.rectangle(
@@ -22,6 +24,9 @@ const gameOverScene = {
       }
     );
     text.setOrigin(0.5, 0.5);
+
+    const music = this.sound.addAudioSprite('audiosprite');
+    music.play('shadowbeingMasteredLong');
   },
 
   update() {}
