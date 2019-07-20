@@ -57,7 +57,7 @@ const creditsScene = {
 
   update() {
     if (this.cursorKeys.space.isDown) {
-      this.scene.transition({ target: "00_title" });
+      this.scene.transition({ target: "00_title", duration: 0 });
     }
   }
 };
