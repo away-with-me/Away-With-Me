@@ -11,7 +11,7 @@ jump
 const CONTROLS_TEXT_RIGHT = `\
 left arrow key
 right arrow key
-up arrow key
+spacebar
 `;
 
 const controlsScene = {
