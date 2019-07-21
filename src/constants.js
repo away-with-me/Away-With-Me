@@ -11,6 +11,7 @@ export const SHADOW_FOLLOW_DISTANCE = 110;
 
 export const GROUND_LEVEL = WORLD_HEIGHT - 16;
 
+export const DEPTH_BACKGROUND = 10
 export const DEPTH_FOREGROUND = 100;
 export const DEPTH_SHADOW_WALL = 200;
 export const DEPTH_ABOVE_SHADOW = 300;

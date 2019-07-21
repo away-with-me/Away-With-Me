@@ -1,14 +1,26 @@
 import TilemapManager from "./TilemapManager";
 import Player from "./Player";
 import ShadowWall from "./ShadowWall";
-import AnchorTree from "./AnchorTree";
-import { WORLD_HEIGHT, CANVAS_WIDTH } from "../../constants";
+import { WORLD_HEIGHT, WORLD_WIDTH, CANVAS_WIDTH } from "../../constants";
 
 const gameScene = {
   key: "game",
 
+
   create() {
     this.keys = this.input.keyboard.createCursorKeys();
+
+    for(let x = 10; x > 0; x--){
+      this.add.image( (272)*x, 170, 'bg0');
+      this.add.image( (272)*x, 170, 'bg1');
+      this.add.image( (272)*x, 170, 'bg2');
+      this.add.image( (272)*x, 170, 'bg3');
+    }
+
+    this.add.image( 0, 170, 'bg0');
+    this.add.image( 0, 170, 'bg1');
+    this.add.image( 0, 170, 'bg2');
+    this.add.image( 0, 170, 'bg3');
 
     this.tilemapManager = new TilemapManager(this);
 
@@ -16,6 +28,9 @@ const gameScene = {
       "markers",
       "player_start"
     );
+    
+    
+
     this.player = new Player(this, playerStart.x, playerStart.y);
     this.add.existing(this.player);
     this.physics.add.existing(this.player);
@@ -26,6 +41,8 @@ const gameScene = {
       this.physics.add.collider(this.player, platformLayer);
     }
 
+    
+
     this.shadowWall = new ShadowWall({ scene: this, player: this.player });
     this.add.existing(this.shadowWall);
     this.physics.add.existing(this.shadowWall);
@@ -34,6 +51,11 @@ const gameScene = {
     this.physics.add.collider(this.player, this.shadowWall, () => {
       this.scene.transition({ target: "gameOver" });
     });
+
+    // this.background = new Background({scene: this, x: WORLD_WIDTH/2, y: WORLD_HEIGHT/2});
+    // this.add.group.existing(this.background);
+
+    
 
     this.cameras.main.startFollow(
       this.player,
