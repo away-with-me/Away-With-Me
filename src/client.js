@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 
-import { CANVAS_HEIGHT, CANVAS_WIDTH } from "./constants";
+import { CANVAS_HEIGHT, CANVAS_WIDTH, GRAVITY_STRENGTH } from "./constants";
 import controlsScene from "./scenes/controls";
 import creditsScene from "./scenes/credits";
 import gameOverScene from "./scenes/gameOver";
@@ -19,7 +19,7 @@ window.game = new Phaser.Game({
     default: "arcade",
     arcade: {
       debug: false,
-      gravity: { y: 350 }
+      gravity: { y: GRAVITY_STRENGTH }
     }
   },
   scene: [

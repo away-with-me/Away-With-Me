@@ -4,6 +4,8 @@ import TilemapManager from "./game/TilemapManager";
 import Player from "./game/Player";
 import ShadowWall from "./game/ShadowWall";
 import AnchorTree from "./game/AnchorTree";
+import Button from "./game/AnchorTree";
+
 import { CANVAS_WIDTH, CANVAS_HEIGHT } from "../constants";
 
 const loadingScene = {
@@ -39,12 +41,15 @@ const loadingScene = {
     Player.preload(this);
     ShadowWall.preload(this);
     AnchorTree.preload(this);
-    Background.preload(this);
+    Button.preload(this);
 
     this.load.image("cursor", "title/cursor.png");
     this.load.image("start-button", "title/start-button.png");
     this.load.image("controls-button", "title/controls-button.png");
     this.load.image("credits-button", "title/credits-button.png");
+    this.load.image("button-red", "RedButton.png");
+    this.load.image("button-blue", "BlueButton.png");
+    this.load.image("button-yellow", "YellowButton.png");
 
 
 

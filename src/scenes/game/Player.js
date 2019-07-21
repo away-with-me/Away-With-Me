@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 
-import { PLAYER_DX, PLAYER_DY } from "../../constants";
+import { PLAYER_DX, PLAYER_DY, DEPTH_PLAYER } from "../../constants";
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
   static preload(scene) {
@@ -9,6 +9,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
   constructor(scene, x = 0, y = 0) {
     super(scene, x, y, "player");
+    this.depth = DEPTH_PLAYER;
   }
 
   update(scene) {

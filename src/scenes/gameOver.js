@@ -21,8 +21,12 @@ const gameOverScene = {
     );
     text.setOrigin(0.5, 0.5);
 
-    const music = this.sound.addAudioSprite('audiosprite');
-    music.play('shadowbeingMasteredLong');
+    try {
+      const music = this.sound.addAudioSprite('audiosprite');
+      music.play('shadowbeingMasteredLong');
+    } catch(err) {
+      console.warn("warning, couldn't play music", err);
+    }
   },
 
   update() {}
