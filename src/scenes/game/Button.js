@@ -19,6 +19,7 @@ export default class Button extends Phaser.GameObjects.Sprite {
   constructor({ scene, x = 0, y = 0, mapObject }) {
     const color = findProperty(mapObject, "color", "base");
     super(scene, x, y, `button-${color}`);
+    this.color = color;
     this.extraLayer = findProperty(mapObject, "extraLayer");
     this.extraBg = findProperty(mapObject, "extraBg");
     this.sound = scene.sound.add("item");
@@ -36,6 +37,8 @@ export default class Button extends Phaser.GameObjects.Sprite {
       if (this.extraBg) {
         scene.tilemapManager.addExtraLayer(scene, this.extraBg, { bg: true });
       }
+      console.log(`got ${this.color} button`);
+      scene.events.emit("away::buttonCollected", this.color);
       this.destroy();
     }
   }

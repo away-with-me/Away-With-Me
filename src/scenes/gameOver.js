@@ -21,12 +21,7 @@ const gameOverScene = {
     );
     text.setOrigin(0.5, 0.5);
 
-    try {
-      const music = this.sound.addAudioSprite('audiosprite');
-      music.play('shadowbeingMasteredLong');
-    } catch(err) {
-      console.warn("warning, couldn't play music", err);
-    }
+    const music = this.sound.add("bgm-gameover").play({ volume: 1, loop: true });
   },
 
   update() {}
