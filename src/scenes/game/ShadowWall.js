@@ -10,7 +10,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   constructor({
     scene,
     player,
-    x = player.x - SHADOW_FOLLOW_DISTANCE,
+    x = player.x - SHADOW_FOLLOW_DISTANCE * 2,
     y = 0
   }) {
     super(scene, x, y, "shadow-wall");

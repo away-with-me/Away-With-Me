@@ -75,11 +75,6 @@ export default class TilemapManager {
         }
       ).value;
 
-      console.log(
-        `making an item ${itemObject.type} named ${itemObject.name}:`,
-        itemObject,
-        { offsetX, offsetY }
-      );
       const item = new ItemClass({
         scene,
         // Tiled coordinates are top-left, sprite coordinates are center of sprite
