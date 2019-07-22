@@ -1,7 +1,12 @@
 import TilemapManager from "./TilemapManager";
 import Player from "./Player";
 import ShadowWall from "./ShadowWall";
-import { WORLD_HEIGHT, CANVAS_WIDTH } from "../../constants";
+import {
+  WORLD_HEIGHT,
+  CANVAS_WIDTH,
+  DEPTH_ABOVE_SHADOW,
+  DEBUG
+} from "../../constants";
 import ParallaxBackground from "../../ParallaxBackground";
 
 const gameScene = {
@@ -44,10 +49,6 @@ const gameScene = {
     this.physics.add.existing(this.shadowWall);
     this.shadowWall.body.allowGravity = false;
 
-    this.physics.add.collider(this.player, this.shadowWall, () => {
-      this.scene.transition({ target: "gameOver" });
-    });
-
     this.cameras.main.startFollow(
       this.player,
       true,
@@ -56,14 +57,83 @@ const gameScene = {
       -CANVAS_WIDTH * 0.1
     );
     this.cameras.main.setBounds(0, 0, Infinity, WORLD_HEIGHT);
+
+    this.musicTracks = [
+      this.sound.add("bgm-game-1", { loop: true, volume: 0 }),
+      this.sound.add("bgm-game-2", { loop: true, volume: 0 }),
+      this.sound.add("bgm-game-3", { loop: true, volume: 0 }),
+      this.sound.add("bgm-game-4", { loop: true, volume: 0 })
+    ];
+    for (const track of this.musicTracks) {
+      track.play();
+    }
+
+    console.log("musicTracks:", this.musicTracks);
+
+    this.buttonsFoundCount = 0;
+
+    let bgMixes = [
+      [1, 0, 0, 0],
+      [0.7, 0.8, 0, 0],
+      [0.4, 0.8, 0.8, 0],
+      [0.2, 0.8, 0.8, 0.8]
+    ];
+
+    if (DEBUG) {
+      let volumeBars = [0, 1, 2, 3].map(i =>
+        this.add
+          .rectangle(CANVAS_WIDTH - 80 + 10 * i, 30, 4, 0, 0x00ffff)
+          .setScrollFactor(0)
+          .setOrigin(0, 1)
+          .setDepth(DEPTH_ABOVE_SHADOW)
+      );
+
+      setInterval(() => {
+        for (let i = 0; i < this.musicTracks.length; i++) {
+          volumeBars[i].height = this.musicTracks[i].volume * 25;
+        }
+      }, 500);
+    }
+
+    const setVolumesTo = (volumes, duration = 3000) => {
+      for (let i = 0; i < this.musicTracks.length; i++) {
+        this.tweens.add({
+          targets: this.musicTracks[i],
+          volume: volumes[i],
+          duration
+        });
+      }
+    };
+
+    setVolumesTo(bgMixes[0]);
+
+    this.events.on("away::buttonCollected", () => {
+      this.buttonsFoundCount += 1;
+      console.log(
+        `turning music track ${this.buttonsFoundCount +
+          1} because a button was found`
+      );
+      setVolumesTo(bgMixes[this.buttonsFoundCount]);
+    });
+
+    this.physics.add.collider(this.player, this.shadowWall, () => {
+      for (const track of this.musicTracks) {
+        track.stop();
+      }
+      this.scene.transition({ target: "gameOver" });
+    });
   },
 
   update() {
-    this.player.update(this);
-    this.shadowWall.update(this);
-    this.tilemapManager.update(this);
-    for (const bg of this.backgrounds) {
-      bg.update(this);
+    try {
+      this.player.update(this);
+      this.shadowWall.update(this);
+      this.tilemapManager.update(this);
+      for (const bg of this.backgrounds) {
+        bg.update(this);
+      }
+    } catch (e) {
+      console.warn("couldn't update", e);
     }
   }
 };

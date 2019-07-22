@@ -32,10 +32,22 @@ const loadingScene = {
   preload() {
     this.bg = this.add.image(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, "title-bg");
 
-    this.load.image("bg0", "backgroundset/BWbackground/parallax-forest-back-trees.png");
-    this.load.image("bg1", "backgroundset/BWbackground/parallax-forest-lights.png");
-    this.load.image("bg2", "backgroundset/BWbackground/parallax-forest-middle-trees.png");
-    this.load.image("bg3", "backgroundset/BWbackground/parallax-forest-front-trees.png");
+    this.load.image(
+      "bg0",
+      "backgroundset/BWbackground/parallax-forest-back-trees.png"
+    );
+    this.load.image(
+      "bg1",
+      "backgroundset/BWbackground/parallax-forest-lights.png"
+    );
+    this.load.image(
+      "bg2",
+      "backgroundset/BWbackground/parallax-forest-middle-trees.png"
+    );
+    this.load.image(
+      "bg3",
+      "backgroundset/BWbackground/parallax-forest-front-trees.png"
+    );
 
     TilemapManager.preload(this);
     Player.preload(this);
@@ -51,13 +63,12 @@ const loadingScene = {
     this.load.image("button-blue", "BlueButton.png");
     this.load.image("button-yellow", "YellowButton.png");
 
-
-
-    this.load.audioSprite({
-      key: "audiosprite",
-      jsonURL: "sounds/audiosprite.json"
-    });
-
+    this.load.audio("bgm-game-1", "sounds/AWM - Ambient 1checkFinal.mp3");
+    this.load.audio("bgm-game-2", "sounds/AWM - Keys 2checkFinal.mp3");
+    this.load.audio("bgm-game-3", "sounds/AWM - Strings 3checkfinal.mp3");
+    this.load.audio("bgm-game-4", "sounds/AWM - Horns 4checkFinal.mp3");
+    this.load.audio("bgm-gameover", "sounds/shadowbeingMasteredLong.mp3");
+    this.load.audio("sfx-shadow-wall", "sounds/shadowWhisperFinal.mp3");
 
     this.loadingBar = this.add.image(
       CANVAS_WIDTH / 2,
@@ -66,16 +77,16 @@ const loadingScene = {
     );
     this.loadingBar.setScale(0, 1);
 
-    this.load.on("progress", value => {
-      this.loadingBar.setScale(value, 1);
-      if (value >= 1) {
-        this.scene.switch("title");
-      }
-    });
+    this.load.on("progress", value => this.loadingBar.setScale(value, 1));
+    this.load.on("load", file =>
+      console.log(`loaded file key=${file.key} url=${file.url}`)
+    );
+  },
 
-    this.load.on(Phaser.Loader.Events.FILE_LOAD, file => {
-      console.log(`loaded file key=${file.key} url=${file.url}`);
-    })
+  create() {
+    console.log("loading from create");
+    clearTimeout(this.fallbackTimeout);
+    this.scene.switch("title");
   }
 };
 
