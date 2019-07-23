@@ -49,6 +49,11 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       }
     }
 
+    if (dx < 0) {
+      this.setFlip(true, false);
+    } else {
+      this.setFlip(false, false);
+    }
     this.setVelocityX(dx);
 
   }
