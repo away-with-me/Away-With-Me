@@ -1,24 +1,18 @@
 import Phaser from "phaser";
 import { CANVAS_WIDTH } from "./constants";
 
-export default class ParallaxBackground extends Phaser.GameObjects.Container {
-  constructor({ scene, x = 0, y = 0, texture, parallaxEffect = 1.0 }) {
-    const tile0 = new BackgroundTile({ scene, texture });
+export default class ParallaxMultiBackground extends Phaser.GameObjects.Container {
+  constructor({ scene, x = 0, y = 0, textures, parallaxEffect = 1.0 }) {
+    const tile0 = new BackgroundTile({ scene, textures });
 
     let effectiveWidth = tile0.width / parallaxEffect;
     let rightMostEdge = tile0.width;
     const tiles = [tile0];
     let neededCount = Math.ceil(CANVAS_WIDTH / effectiveWidth) + 1;
-    console.log({
-      effectiveWidth,
-      CANVAS_WIDTH,
-      tile0Width: tile0.width,
-      neededCount
-    });
 
     // start at one because tile 0 is already constructed
     for (let i = 1; i < neededCount; i++) {
-      tiles.push(new BackgroundTile({ scene, x: rightMostEdge, texture }));
+      tiles.push(new BackgroundTile({ scene, x: rightMostEdge, textures }));
       rightMostEdge += tile0.width;
     }
 
@@ -72,11 +66,27 @@ export default class ParallaxBackground extends Phaser.GameObjects.Container {
       this.leftIndex = rightIndex;
     }
   }
+
+  nextBackground() {
+    for (const tile of this.tiles) {
+      tile.nextBackground();
+    }
+  }
 }
 
 class BackgroundTile extends Phaser.GameObjects.Image {
-  constructor({ scene, x = 0, y = 0, texture }) {
-    super(scene, x, y, texture);
+  constructor({ scene, x = 0, y = 0, textures }) {
+    super(scene, x, y, textures[0]);
+    this.textures = textures;
+    this.textureIndex = 0;
     this.setOrigin(0);
+  }
+
+  nextBackground() {
+    this.textureIndex += 1;
+    if (this.textureIndex >= this.textures.length) {
+      throw new Error("no more backgrounds");
+    }
+    this.setTexture(this.textures[this.textureIndex]);
   }
 }

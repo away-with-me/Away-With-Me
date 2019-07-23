@@ -32,22 +32,17 @@ const loadingScene = {
   preload() {
     this.bg = this.add.image(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, "title-bg");
 
-    this.load.image(
-      "bg0",
-      "backgroundset/BWbackground/parallax-forest-back-trees.png"
-    );
-    this.load.image(
-      "bg1",
-      "backgroundset/BWbackground/parallax-forest-lights.png"
-    );
-    this.load.image(
-      "bg2",
-      "backgroundset/BWbackground/parallax-forest-middle-trees.png"
-    );
-    this.load.image(
-      "bg3",
-      "backgroundset/BWbackground/parallax-forest-front-trees.png"
-    );
+    let bgNames = ["back-trees", "lights", "middle-trees", "front-trees"];
+    for (const color of ["BW", "Blue", "Red", "Yellow"]) {
+      for (let index = 0; index < 4; index++) {
+        this.load.image(
+          `bg${index}-${color.toLowerCase()}`,
+          `backgroundset/${color}background/parallax-forest-${
+            bgNames[index]
+          }.png`
+        );
+      }
+    }
 
     TilemapManager.preload(this);
     Player.preload(this);
@@ -84,7 +79,7 @@ const loadingScene = {
   },
 
   create() {
-    console.log("loading from create");
+    console.log("Switching to title screen from create method");
     clearTimeout(this.fallbackTimeout);
     this.scene.switch("title");
   }

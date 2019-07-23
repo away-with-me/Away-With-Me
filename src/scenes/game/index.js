@@ -7,7 +7,7 @@ import {
   DEPTH_ABOVE_SHADOW,
   DEBUG
 } from "../../constants";
-import ParallaxBackground from "../../ParallaxBackground";
+import ParallaxMultiBackground from "../../ParallaxMultiBackground";
 
 const gameScene = {
   key: "game",
@@ -17,9 +17,9 @@ const gameScene = {
 
     this.backgrounds = [];
     for (let i = 0; i < 4; i++) {
-      let bg = new ParallaxBackground({
+      let bg = new ParallaxMultiBackground({
         scene: this,
-        texture: `bg${i}`,
+        textures: ['bw', 'blue', 'red', 'yellow'].map(color => `bg${i}-${color}`),
         y: 90,
         parallaxEffect: 1 + (3 - i) * 0.05
       });
@@ -68,8 +68,6 @@ const gameScene = {
       track.play();
     }
 
-    console.log("musicTracks:", this.musicTracks);
-
     this.buttonsFoundCount = 0;
 
     let bgMixes = [
@@ -109,11 +107,11 @@ const gameScene = {
 
     this.events.on("away::buttonCollected", () => {
       this.buttonsFoundCount += 1;
-      console.log(
-        `turning music track ${this.buttonsFoundCount +
-          1} because a button was found`
-      );
       setVolumesTo(bgMixes[this.buttonsFoundCount]);
+
+      for (const bg of this.backgrounds) {
+        bg.nextBackground();
+      }
     });
 
     this.physics.add.collider(this.player, this.shadowWall, () => {
