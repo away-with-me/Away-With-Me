@@ -19,7 +19,9 @@ const gameScene = {
     for (let i = 0; i < 4; i++) {
       let bg = new ParallaxMultiBackground({
         scene: this,
-        textures: ['bw', 'blue', 'red', 'yellow'].map(color => `bg${i}-${color}`),
+        textures: ["bw", "blue", "red", "yellow"].map(
+          color => `bg${i}-${color}`
+        ),
         y: 90,
         parallaxEffect: 1 + (3 - i) * 0.05
       });
