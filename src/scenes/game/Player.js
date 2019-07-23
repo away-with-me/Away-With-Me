@@ -26,7 +26,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
 
-    // This is all set up for mythmon's 8bitdo SF30 Pro in bluetooth Xinput mode
+    // This is all set up for mythmon's 8bitdo SF30 Pro in wired Mac mode on Errolyn's Macbook
     let pad = scene.input.gamepad.pad1;
     if (pad) {
       // joystick
@@ -34,11 +34,17 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         dx += pad.axes[0].value * PLAYER_DX
       }
       // dpad
-      if (Math.abs(pad.axes[6].value) > pad.axes[6].threshold) {
-        dx += pad.axes[6].value * PLAYER_DX
+      // if (Math.abs(pad.axes[6].value) > pad.axes[6].threshold) {
+      //   dx += pad.axes[6].value * PLAYER_DX
+      // }
+      if (pad.buttons[16].pressed) {
+        dx -= PLAYER_DX;
+      }
+      if (pad.buttons[17].pressed) {
+        dx += PLAYER_DX;
       }
 
-      if (pad.B && this.body.blocked.down) {
+      if (pad.buttons[2].pressed && this.body.blocked.down) {
         this.body.setVelocityY(-PLAYER_DY);
       }
     }
